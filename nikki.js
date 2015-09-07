@@ -12,39 +12,18 @@ var CATEGORY_HIERARCHY = function() {
   return ret;
 }();
 
-// for table use
-function thead(score) {
-  var ret = "<tr>";
-  if (score) {
-    ret += "<th class='score'>分数</th>";
-  }
-  
-  ret += "<th class='name'>名称</th>\
-  <th class='category'>类别</th>\
-  <th class='th_number'>编号</th>\
-  <th>心级</th>\
-  <th>简约</th>\
-  <th>华丽</th>\
-  <th>可爱</th>\
-  <th>成熟</th>\
-  <th>活泼</th>\
-  <th>优雅</th>\
-  <th>清纯</th>\
-  <th>性感</th>\
-  <th>清凉</th>\
-  <th>保暖</th>\
-  <th class='th_tag'>特殊属性</th>\
-  <th class='th_from'>来源</th>\
-  <th class='th_nbsp'>&nbsp;</th>";
-  return ret + "</tr>\n";
-}
-
 function tr(tds) {
-  return "<tr>" + tds + "</tr>\n";
+  return "<tr><td>" + tds + "<td></tr>\n";
 }
 
-function td(data, cls) {
-  return "<td class='" + cls + "'>" + data + "</td>";
+function td(data, cls, br) {
+	if(br){
+		br = "<br/>";
+	}
+	else{
+		br = "";
+	}
+  return "<span class='" + cls + " clothes_span'>" + data + "</span>" + br;
 }
 
 function inventoryCheckbox(type, id, own) {
@@ -104,27 +83,50 @@ function clickableTd(piece) {
     }
   }
   cls += own ? ' own' : '';
-  return "<td id='clickable-" + (type + id) + "' class='" + cls
+  return "<span id='clickable-" + (type + id) + "' class='" + cls
       + "'><a href='#dummy' class='button' " + tooltip
       + "onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'>"
-      + name + "</a></td>";
+      + name + "</a></span>";
 }
 
 function row(piece, isShoppingCart) {
   //var ret = isShoppingCart ? "" : td(inventoryCheckbox(piece.type.mainType, piece.id, piece.own), "");
   var ret = "";
   if (!isFilteringMode) {
-    ret += td(piece.tmpScore);
+    ret += td(piece.tmpScore, "label label-warning");
   }
   if (isShoppingCart) {
     ret += td(piece.name, '');
   } else {
     ret += clickableTd(piece);
   }
-  var csv = piece.toCsv();
-  for (var i in csv) {
-    ret += td(render(csv[i]), getStyle(csv[i]));
+  
+  if (piece.simple[0]!=""){
+    ret += td("简约:" + piece.simple[0], piece.simple[0]);
+  } else {
+    ret += td("华丽:" + piece.simple[1], piece.simple[1]);
   }
+  if (piece.cute[0]!=""){
+    ret += td("可爱:" + piece.cute[0], piece.cute[0]);
+  } else {
+    ret += td("成熟:" + piece.cute[1], piece.cute[1]);
+  }
+  if (piece.active[0]!=""){
+    ret += td("活泼:" + piece.active[0], piece.active[0]);
+  } else {
+    ret += td("优雅:" + piece.active[1], piece.active[1]);
+  }
+  if (piece.pure[0]!=""){
+    ret += td("清纯:" + piece.pure[0], piece.pure[0]);
+  } else {
+    ret += td("性感:" + piece.pure[1], piece.pure[1]);
+  }
+  if (piece.cool[0]!=""){
+    ret += td("清凉:" + piece.cool[0], piece.cool[0]);
+  } else {
+    ret += td("保暖:" + piece.cool[1], piece.cool[1]);
+  }
+  
   if (isShoppingCart) {
     // use id to detect if it is a fake clothes
     if (piece.id) {
@@ -162,30 +164,18 @@ function list(rows, isShoppingCart) {
   for (var i in rows) {
     ret += row(rows[i], isShoppingCart);
   }
-  if (isShoppingCart) {
-    ret += row(shoppingCart.totalScore, isShoppingCart);
-  }
   return ret;
 }
 
 function drawTable(data, div, isShoppingCart) {
   if ($('#' + div + ' table').length == 0) {
     if (isShoppingCart) {
-      $('#' + div).html("<table id='tb_"+div+"'><thead></thead><tbody></tbody></table>");
+      $('#' + div).html("<table id='tb_"+div+"'><tbody></tbody></table>");
     } else {
-      $('#' + div).html("<table id='tb_"+div+"' class='mainTable'><thead></thead><tbody></tbody></table>");
+      $('#' + div).html("<table id='tb_"+div+"' class='mainTable'><tbody></tbody></table>");
     }
   }
-  $('#' + div + ' table thead').html(thead(!isFilteringMode));
   $('#' + div + ' table tbody').html(list(data, isShoppingCart));
-  if (!isShoppingCart) {
-    redrawThead();
-  }
-}
-
-function redrawThead() {
-  $('button.destoryFloat').text(global.floating ? '关闭浮动' : '打开浮动');
-  $('th.top').html(global.floating ? "<a href='#filtersTop'>回到顶部</a>" : "");
 }
 
 var criteria = {};
@@ -520,8 +510,13 @@ function toggleAll(c) {
 
 function drawFilter() {
   out = "<ul class='nav nav-tabs nav-justified' id='categoryTab'>";
+  var i = 0;
   for (var c in CATEGORY_HIERARCHY) {
     out += '<li id="' + c + '"><a href="#dummy" onClick="switchCate(\'' + c + '\')">' + c + '&nbsp;&nbsp;<span class="badge">0</span></a></li>';
+	if(i % 3 == 2){
+		out += "<br/>";
+	}
+	i++;
   }
   out += "</ul>";
   for (var c in CATEGORY_HIERARCHY) {
@@ -718,7 +713,6 @@ function init() {
   switchCate(category[0]);
   updateSize(mine);
   refreshShoppingCart();
-  $("#tb_clothes").freezeHeader();
   changeMode(false);
 }
 $(document).ready(function() {

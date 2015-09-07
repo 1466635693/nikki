@@ -3,7 +3,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>奇迹暖暖在线配装器</title>
     <script type='text/javascript' charset="UTF-8" src='jquery.js'></script>
-    <script type='text/javascript' charset="UTF-8" src='jquery.freezeheader.js'></script>
     <script type='text/javascript' charset="UTF-8" src='wardrobe.js'></script>
     <script type='text/javascript' charset="UTF-8" src='scoring.js'></script>
     <script type='text/javascript' charset="UTF-8" src='levels.js'></script>
@@ -16,65 +15,9 @@
 	body{
 		padding:20px
 	}
-    table
-    {
-      font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-      font-size: 12px;
-      background: #fff;
-      border-collapse: collapse;
-      text-align: center;
-      table-layout: fixed;
-    }
-	thead{
-		z-index: 10;
-		background: WhiteSmoke;
+	.clothes_span {
+		margin : 5
 	}
-    th
-    {
-      font-size: 14px;
-      font-weight: normal;
-      color: #039;
-      padding: 10px 8px;
-      border-bottom: 2px solid #6678b1;
-	  text-align:center;
-    }
-    th.score {
-      width: 55px;
-    }
-    th.name {
-      width: 130px;
-    }
-    th.category {
-      width: 110px;
-    }
-	th.th_number {
-	  width: 50px;
-	}
-	th.th_from {
-      width: 140px;	
-	}
-	th.th_tag {
-      width: 120px;	
-	}
-	th.th_nbsp {
-      width: 50px;		
-	}
-    td
-    {
-      color: #669;
-      padding: 4px 4px 4px 4px;
-    }
-    table.mainTable td.own.deps .button {
-      background-color: #fdd;
-    }
-    table.mainTable td.own .button
-    {
-      padding-left:20px;
-      background-position: 5px 8px;
-      background-repeat: no-repeat;
-      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAU0lEQVR42mNgoAHgZ2FjO8/MxjafaMUs7Oz/QZiQJhTFYAzkg2VAOqEcfgKK+SGKUQXlcSoGAQxJdIxqMw7r8ShmIOhmokKFCMVwTdCw5qdatAMAai8zEfxslWsAAAAASUVORK5CYII=);
-      background-color: #dfd;
-    }
     .button {
       position: relative;
       overflow: visible;
@@ -107,67 +50,20 @@
       color: #009;
       background: #eee;
     }
-    td.S {
+    span.S {
       color: #FB3;
     }
-    td.A {
+    span.A {
       color: #F0A;
     }
-    td.B {
+    span.B {
       color: #A66;
     }
-    td.C {
+    span.C {
       color: #38F;
     }
     td.negative {
       text-decoration: line-through;
-    }
-    div.facet {
-      margin-left:10px;
-    }
-    div.announcement {
-      max-width: 800px;
-    }
-    div.weightContainer {
-      display: inline-block;
-    }
-    ul.tabs {
-    	margin: 0;
-    	padding: 0;
-    	list-style: none;
-    	height: 32px;
-    	border-bottom: 1px solid #999;
-    	border-left: 1px solid #999;
-    	width: 100%;
-    }
-    ul.tabs li {
-    	float: left;
-    	margin: 0;
-    	padding: 0;
-    	height: 31px;
-    	line-height: 31px;
-    	border: 1px solid #999;
-    	border-left: none;
-    	margin-bottom: -1px;
-    	background: #F0F0F0;
-    	overflow: hidden;
-    	position: relative;
-    }
-    ul.tabs li a {
-    	text-decoration: none;
-    	color: #000;
-    	display: block;
-    	font-size: 1.2em;
-    	padding: 0 10px;
-    	border: 1px solid #fff;
-    	outline: none;
-    }
-    ul.tabs li a:hover {
-    	background: #ccc;
-    }	
-    html ul.tabs li.active, html ul.tabs li.active a:hover  {
-    	background: #fff;
-    	border-bottom: 1px solid #fff;
     }
     #category_container div {
     	display:none;
