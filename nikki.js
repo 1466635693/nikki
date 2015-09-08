@@ -552,8 +552,11 @@ function setFilters(level) {
       var element = radios[j];
       if (parseInt(element.value) * weight > 0) {
         element.checked = true;
-        break;
+		element.parentElement.classList.add("active");
       }
+	  else if(element.parentElement){
+		element.parentElement.classList.remove("active");
+	  }
     }
   }
   clearTag('tag1');
