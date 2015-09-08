@@ -548,14 +548,14 @@ function setFilters(level) {
     var weight = weights[f];
     $('#' + f + 'Weight').val(Math.abs(weight));
     var radios = $('input[name=' + f + ']:radio');
-    for (var j in radios) {
-      var element = radios[j];
-      if (parseInt(element.value) * weight > 0) {
-        element.checked = true;
-		element.parentElement.classList.add("active");
+    for (var j = 0 ; j < radios.length ; j++) {
+      var element = $(radios[j]);
+      if (parseInt(element.attr("value")) * weight > 0) {
+        element.prop("checked", true);
+		element.parent().addClass("active");
       }
-	  else if(element.parentElement){
-		element.parentElement.classList.remove("active");
+	  else if(element.parent()){
+		element.parent().removeClass("active");
 	  }
     }
   }
