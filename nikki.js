@@ -12,30 +12,6 @@ var CATEGORY_HIERARCHY = function() {
   return ret;
 }();
 
-function tr(tds) {
-  return "<div class='clothes_div'>" + tds + "</div>\n";
-}
-
-function td(data, cls, br) {
-	if(br){
-		br = "<br/>";
-	}
-	else{
-		br = "";
-	}
-  return "<span class='" + cls + " clothes_span'>" + data + "</span>" + br;
-}
-
-function inventoryCheckbox(type, id, own) {
-  var ret = "<input type = 'checkbox' name = 'inventory' id = '" + (type + id)
-      + "' onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'";
-  if (own) {
-    ret += "checked";
-  }
-  ret += "/>";
-  return ret;
-}
-
 function shoppingCartButton(type, id) {
   return "<button class='glyphicon glyphicon-shopping-cart btn' onClick='addShoppingCart(\"" + type + "\",\"" + id
       + "\")'></button>";
@@ -83,58 +59,58 @@ function clickableTd(piece) {
     }
   }
   cls += own ? ' own' : '';
-  return "<span id='clickable-" + (type + id) + "' class='" + cls
-      + "'><a href='#dummy' class='button' " + tooltip
-      + "onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'>"
-      + name + "</a></span>";
+  return $("<span id='clickable-" + (type + id) + "' class='" + cls
+      + "'><a href='#dummy' class='button' onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'>"
+      + name + "</a></span>");
+}
+
+function td(data, cls) {
+  return $("<span>").addClass(cls).addClass("clothes_span").append(data);
 }
 
 function row(piece, isShoppingCart) {
-  //var ret = isShoppingCart ? "" : td(inventoryCheckbox(piece.type.mainType, piece.id, piece.own), "");
-  var ret = "";
-  if (!isFilteringMode) {
-    ret += td(piece.tmpScore, "label label-warning");
-  }
+  var $ret = $("<div>").addClass("clothes_div");
+  $ret.append(td(piece.tmpScore, "label label-warning"));
   if (isShoppingCart) {
-    ret += td(piece.name, '');
+    $ret.append(td(piece.name));
   } else {
-    ret += clickableTd(piece);
+    $ret.append(clickableTd(piece));
   }  
   if (isShoppingCart) {
     if (piece.id) {
-      ret += td(removeShoppingCartButton(piece.type.type), '');
+      $ret.append(td(removeShoppingCartButton(piece.type.type)));
     }
   } else {
-    ret += td(shoppingCartButton(piece.type.mainType, piece.id), '');
+    $ret.append(td(shoppingCartButton(piece.type.mainType, piece.id)));
   }
-  ret += ("<br/>");
+  $ret.append($("<br/>"));
   
   if (piece.simple[0]!=""){
-    ret += td("简约:" + piece.simple[0], piece.simple[0]);
+    $ret.append(td("简约:" + piece.simple[0], piece.simple[0]));
   } else {
-    ret += td("华丽:" + piece.simple[1], piece.simple[1]);
+    $ret.append(td("华丽:" + piece.simple[1], piece.simple[1]));
   }
   if (piece.cute[0]!=""){
-    ret += td("可爱:" + piece.cute[0], piece.cute[0]);
+    $ret.append(td("可爱:" + piece.cute[0], piece.cute[0]));
   } else {
-    ret += td("成熟:" + piece.cute[1], piece.cute[1]);
+    $ret.append(td("成熟:" + piece.cute[1], piece.cute[1]));
   }
   if (piece.active[0]!=""){
-    ret += td("活泼:" + piece.active[0], piece.active[0]);
+    $ret.append(td("活泼:" + piece.active[0], piece.active[0]));
   } else {
-    ret += td("优雅:" + piece.active[1], piece.active[1]);
+    $ret.append(td("优雅:" + piece.active[1], piece.active[1]));
   }
   if (piece.pure[0]!=""){
-    ret += td("清纯:" + piece.pure[0], piece.pure[0]);
+    $ret.append(td("清纯:" + piece.pure[0], piece.pure[0]));
   } else {
-    ret += td("性感:" + piece.pure[1], piece.pure[1]);
+    $ret.append(td("性感:" + piece.pure[1], piece.pure[1]));
   }
   if (piece.cool[0]!=""){
-    ret += td("清凉:" + piece.cool[0], piece.cool[0]);
+    $ret.append(td("清凉:" + piece.cool[0], piece.cool[0]));
   } else {
-    ret += td("保暖:" + piece.cool[1], piece.cool[1]);
+    $ret.append(td("保暖:" + piece.cool[1], piece.cool[1]));
   }
-  return tr(ret);
+  return $ret;
 }
 
 function render(rating) {
@@ -158,23 +134,22 @@ function getStyle(rating) {
   }
 }
 
-function list(rows, isShoppingCart) {
-  ret = "";
+function list(div, rows, isShoppingCart) {
+  var $ret = $('#' + div + ' div');
+  var a  = 0;
   for (var i in rows) {
-    ret += row(rows[i], isShoppingCart);
+    $ret.append(row(rows[i], isShoppingCart));
   }
-  return ret;
+  return $ret;
 }
 
 function drawTable(data, div, isShoppingCart) {
-  if ($('#' + div + ' div').length == 0) {
     if (isShoppingCart) {
       $('#' + div).html("<div id='tb_"+div+"'></div>");
     } else {
       $('#' + div).html("<div id='tb_"+div+"' class='mainTable'></div>");
     }
-  }
-  $('#' + div + ' div').html(list(data, isShoppingCart));
+  list(div, data, isShoppingCart);
 }
 
 var criteria = {};
