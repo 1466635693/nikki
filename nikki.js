@@ -13,12 +13,12 @@ var CATEGORY_HIERARCHY = function() {
 }();
 
 function shoppingCartButton(type, id) {
-  return "<button class='glyphicon glyphicon-shopping-cart btn' onClick='addShoppingCart(\"" + type + "\",\"" + id
+  return "<button class='glyphicon glyphicon-shopping-cart btn pull-right' onClick='addShoppingCart(\"" + type + "\",\"" + id
       + "\")'></button>";
 }
 
 function removeShoppingCartButton(detailedType) {
-  return "<button class='glyphicon glyphicon-trash' onClick='removeShoppingCart(\"" + detailedType + "\")'></button>";
+  return "<button class='glyphicon glyphicon-trash pull-right' onClick='removeShoppingCart(\"" + detailedType + "\")'></button>";
 }
 
 function addShoppingCart(type, id) {
