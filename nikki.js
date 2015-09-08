@@ -99,7 +99,15 @@ function row(piece, isShoppingCart) {
     ret += td(piece.name, '');
   } else {
     ret += clickableTd(piece);
+  }  
+  if (isShoppingCart) {
+    if (piece.id) {
+      ret += td(removeShoppingCartButton(piece.type.type), '');
+    }
+  } else {
+    ret += td(shoppingCartButton(piece.type.mainType, piece.id), '');
   }
+  ret += ("<br/>");
   
   if (piece.simple[0]!=""){
     ret += td("简约:" + piece.simple[0], piece.simple[0]);
@@ -125,15 +133,6 @@ function row(piece, isShoppingCart) {
     ret += td("清凉:" + piece.cool[0], piece.cool[0]);
   } else {
     ret += td("保暖:" + piece.cool[1], piece.cool[1]);
-  }
-  
-  if (isShoppingCart) {
-    // use id to detect if it is a fake clothes
-    if (piece.id) {
-      ret += td(removeShoppingCartButton(piece.type.type), '');
-    }
-  } else {
-    ret += td(shoppingCartButton(piece.type.mainType, piece.id), '');
   }
   return tr(ret);
 }
@@ -509,14 +508,9 @@ function toggleAll(c) {
 }
 
 function drawFilter() {
-  out = "<ul class='nav nav-tabs nav-justified' id='categoryTab'>";
-  var i = 0;
+  out = "<ul class='nav nav-pills' id='categoryTab'>";
   for (var c in CATEGORY_HIERARCHY) {
     out += '<li id="' + c + '"><a href="#dummy" onClick="switchCate(\'' + c + '\')">' + c + '&nbsp;&nbsp;<span class="badge">0</span></a></li>';
-	if(i % 3 == 2){
-		out += "<br/>";
-	}
-	i++;
   }
   out += "</ul>";
   for (var c in CATEGORY_HIERARCHY) {
