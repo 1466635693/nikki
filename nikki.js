@@ -13,7 +13,7 @@ var CATEGORY_HIERARCHY = function() {
 }();
 
 function tr(tds) {
-  return "<tr><td>" + tds + "<td></tr>\n";
+  return "<div class='clothes_div'>" + tds + "</div>\n";
 }
 
 function td(data, cls, br) {
@@ -167,14 +167,14 @@ function list(rows, isShoppingCart) {
 }
 
 function drawTable(data, div, isShoppingCart) {
-  if ($('#' + div + ' table').length == 0) {
+  if ($('#' + div + ' div').length == 0) {
     if (isShoppingCart) {
-      $('#' + div).html("<table id='tb_"+div+"'><tbody></tbody></table>");
+      $('#' + div).html("<div id='tb_"+div+"'></div>");
     } else {
-      $('#' + div).html("<table id='tb_"+div+"' class='mainTable'><tbody></tbody></table>");
+      $('#' + div).html("<div id='tb_"+div+"' class='mainTable'></div>");
     }
   }
-  $('#' + div + ' table tbody').html(list(data, isShoppingCart));
+  $('#' + div + ' div').html(list(data, isShoppingCart));
 }
 
 var criteria = {};
@@ -539,28 +539,7 @@ function switchCate(c) {
   onChangeUiFilter();
 }
 
-var isFilteringMode = true;
-function changeMode(isFiltering) {
-  for (var i in FEATURES) {
-    var f = FEATURES[i];
-    if (isFiltering) {
-      $('#' + f + 'WeightContainer').hide();
-    } else {
-      $('#' + f + 'WeightContainer').show();
-    }
-  }
-  if (isFiltering) {
-    $("#theme").hide();
-    $("#tagInfo").hide();
-    $(".tagContainer").hide();
-  } else {
-    $("#theme").show();
-    $("#tagInfo").show();
-    $(".tagContainer").show();
-  }
-  isFilteringMode = isFiltering;
-  onChangeCriteria();
-}
+var isFilteringMode = false;
 
 function changeFilter() {
   $("#theme")[0].options[0].selected = true;
@@ -707,7 +686,7 @@ function init() {
   switchCate(category[0]);
   updateSize(mine);
   refreshShoppingCart();
-  changeMode(false);
+  onChangeCriteria();
 }
 $(document).ready(function() {
   init()

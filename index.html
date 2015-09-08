@@ -16,13 +16,13 @@
 
     <style>
 	.clothes_span {
-		margin : 5
+		margin : 5px;
 	}
-    tbody tr:hover td
-    {
-      color: #009;
-      background: #eee;
-    }
+	.clothes_div {
+		color: #009;
+		background: #eee;
+		margin : 5px;
+	}
     span.S {
       color: #FB3;
     }
@@ -80,6 +80,12 @@
 	span.badge{
 		background: SlateGray;
 	}
+	.row{
+		padding: 2px;
+	}
+	.row input[type='text']{
+		max-width: 80px
+	}
   </style>
     
   </head>
@@ -91,16 +97,15 @@
     <div id='filtersTop'>
       <form name="filter_form">
         <div>
-          <input style="display:none" type="radio" name="mode" value="ranking" onClick="changeMode(false)" checked/> 计分
-          <select id="theme" onChange="changeTheme()" style="display: none"></select>
-          </div>
+          <select id="theme" onChange="changeTheme()"></select>
+        </div>
 		<div>
 			<div id="tagInfo"></div>
 			<div id="skillInfo"></div>
 			<div id="hintInfo"></div>
 		</div>
         <div class='facet'>
-          <div>
+          <div class="row">
 			<div class="btn-group" data-toggle="buttons">
 				<label class="btn btn-info">
 					<input type="radio" name="simple" value="0" onClick="changeFilter()" /> 皆可
@@ -112,11 +117,9 @@
 					<input type="radio" name="simple" value="-1" onClick="changeFilter()" /> 华丽
 				</label>
 			</div>
-            <div class='weightContainer' style="display: none" id = "simpleWeightContainer">
-            	&nbsp;&nbsp;权重 <input type="text" id="simpleWeight" name="simpleWeight" value="1" onChange="changeFilter()" />
-          	</div>
-          </div>
-          <div>		  
+			<input type="text" id="simpleWeight" name="simpleWeight" value="1" onChange="changeFilter()" placeholder="权重" />
+		  </div>
+          <div class="row">		  
 			<div class="btn-group" data-toggle="buttons">
 				<label class="btn btn-info">
 					<input type="radio" name="cute" value="0" onClick="changeFilter()" /> 皆可
@@ -128,11 +131,9 @@
 					<input type="radio" name="cute" value="-1" onClick="changeFilter()" /> 成熟
 				</label>
 			</div>
-            <div class='weightContainer' style="display: none" id = "cuteWeightContainer">
-            	&nbsp;&nbsp;权重 <input type="text" id="cuteWeight" name="cuteWeight" value="1" onChange="changeFilter()" />
-            </div>
+			<input type="text" id="cuteWeight" name="cuteWeight" value="1" onChange="changeFilter()" />
           </div>
-          <div>
+          <div class="row">
 			<div class="btn-group" data-toggle="buttons">
 				<label class="btn btn-info">
 					<input type="radio" name="active" value="0" onClick="changeFilter()" /> 皆可
@@ -144,11 +145,9 @@
 					<input type="radio" name="active" value="-1" onClick="changeFilter()" /> 优雅
 				</label>
 			</div>
-            <div class='weightContainer' style="display: none" id = "activeWeightContainer">
-              &nbsp;&nbsp;权重 <input type="text" id="activeWeight" name="activeWeight" value="1" onChange="changeFilter()" />
-            </div>
+            <input type="text" id="activeWeight" name="activeWeight" value="1" onChange="changeFilter()" />
           </div>
-          <div>
+          <div class="row">
 			<div class="btn-group" data-toggle="buttons">
 				<label class="btn btn-info">
 					<input type="radio" name="pure" value="0" onClick="changeFilter()" /> 皆可
@@ -160,11 +159,9 @@
 					<input type="radio" name="pure" value="-1" onClick="changeFilter()" /> 性感
 				</label>
 			</div>
-            <div class='weightContainer' style="display: none" id = "pureWeightContainer">
-              &nbsp;&nbsp;权重 <input type="text" id="pureWeight" name="pureWeight" value="1" onChange="changeFilter()" />
-            </div>
+            <input type="text" id="pureWeight" name="pureWeight" value="1" onChange="changeFilter()" />
           </div>
-          <div>
+          <div class="row">
 			<div class="btn-group" data-toggle="buttons">
 				<label class="btn btn-info">
 					<input type="radio" name="cool" value="0" onClick="changeFilter()" /> 皆可
@@ -176,57 +173,59 @@
 					<input type="radio" name="cool" value="-1" onClick="changeFilter()" /> 保暖
 				</label>
 			</div>
-            <div class='weightContainer' style="display: none" id = "coolWeightContainer">
-              &nbsp;&nbsp;权重 <input type="text" id="coolWeight" name="coolWeight" value="1" onChange="changeFilter()" />
-            </div>
+            <input type="text" id="coolWeight" name="coolWeight" value="1" onChange="changeFilter()" />
           </div>
           <div id='tagFilter'>
-            Tag1
-            <input type="text" id="tag1" name="tag1" onChange="changeFilter()" />
-            <div class='tagContainer weightContainer' style="display: none" id = "tag1Container">
-				<div class="btn-group" data-toggle="buttons">
-					<label class="btn btn-info active">
-						<input type="radio" name="tag1method" value="add" onClick="changeFilter()" checked/> 加分
-					</label>
-					<label class="btn btn-info">
-						<input type="radio" name="tag1method" value="replace" onClick="changeFilter()" /> 替换
-					</label>
+			<div class="row">
+				Tag1
+				<input type="text" id="tag1" name="tag1" onChange="changeFilter()" />
+				<div class='tagContainer weightContainer' id = "tag1Container">
+					<div class="btn-group" data-toggle="buttons">
+						<label class="btn btn-info active">
+							<input type="radio" name="tag1method" value="add" onClick="changeFilter()" checked/> 加分
+						</label>
+						<label class="btn btn-info">
+							<input type="radio" name="tag1method" value="replace" onClick="changeFilter()" /> 替换
+						</label>
+					</div>
+				  <select id="tag1base" onChange="changeFilter()">
+					<option>SS</option>
+					<option>S</option>
+					<option>A</option>
+					<option>B</option>
+					<option>C</option>
+				  </select>
+				  &times;
+				  <input type="text" id="tag1weight" name="tag1weight" value="1" onChange="changeFilter()" />
 				</div>
-              <select id="tag1base" onChange="changeFilter()">
-                <option>SS</option>
-                <option>S</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-              </select>
-              &times;
-              <input type="text" id="tag1weight" name="tag1weight" value="1" onChange="changeFilter()" />
-            </div>
-            <br/>
-            Tag2
-            <input type="text" id="tag2" name="tag2" onChange="changeFilter()" />
-            <div class='tagContainer weightContainer' style="display: none" id = "tag2Container">
-				<div class="btn-group" data-toggle="buttons">
-					<label class="btn btn-info active">
-						<input type="radio" name="tag2method" value="add" onClick="changeFilter()" checked/> 加分
-					</label>
-					<label class="btn btn-info">					
-						<input type="radio" name="tag2method" value="replace" onClick="changeFilter()" /> 替换
-					</label>
+			</div>
+			<div class="row">
+				Tag2
+				<input type="text" id="tag2" name="tag2" onChange="changeFilter()" />
+				<div class='tagContainer weightContainer' id = "tag2Container">
+					<div class="btn-group" data-toggle="buttons">
+						<label class="btn btn-info active">
+							<input type="radio" name="tag2method" value="add" onClick="changeFilter()" checked/> 加分
+						</label>
+						<label class="btn btn-info">					
+							<input type="radio" name="tag2method" value="replace" onClick="changeFilter()" /> 替换
+						</label>
+					</div>
+				  <select id="tag2base" onChange="changeFilter()">
+					<option>SS</option>
+					<option>S</option>
+					<option>A</option>
+					<option>B</option>
+					<option>C</option>
+				  </select>
+				  &times;
+				  <input type="text" id="tag2weight" name="tag2weight" value="1" onChange="changeFilter()" />
 				</div>
-              <select id="tag2base" onChange="changeFilter()">
-                <option>SS</option>
-                <option>S</option>
-                <option>A</option>
-                <option>B</option>
-                <option>C</option>
-              </select>
-              &times;
-              <input type="text" id="tag2weight" name="tag2weight" value="1" onChange="changeFilter()" />
-            </div>
+			</div>
           </div>
         </div>
         <div>
+			<div class="row">
 			<div class="btn-group" data-toggle="buttons">
 				<label class="btn btn-info active">
 					<input type="checkbox" name="inventory" value="own" onClick="onChangeUiFilter()" checked />拥有
@@ -235,6 +234,7 @@
 				<label class="btn btn-info active">					
 					 <input type="checkbox" name="inventory" value="missing" onClick="onChangeUiFilter()" checked /> 没有
 				</label>
+			</div>
 			</div>
         </div>
       </form>
@@ -258,7 +258,8 @@
     </div>
 
     <hr>
-    <p>我拥有的服装 （复制衣橱文本框内容以备份衣橱）</p>
+    <p>我拥有的服装 
+	（复制衣橱文本框内容以备份衣橱）</p>
     <textarea id="myClothes" rows=10></textarea>
     <br/>
     <button onClick="loadCustomInventory()">Update inventory</button>
