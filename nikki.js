@@ -171,9 +171,7 @@ function onChangeCriteria() {
   if (global.additionalBonus && global.additionalBonus.length > 0) {
     criteria.bonus = global.additionalBonus;
   }
-  if (!isFilteringMode){
-    chooseAccessories(criteria);
-  }
+  chooseAccessories(criteria);
   drawLevelInfo();
   refreshTable();
 }
@@ -217,7 +215,7 @@ function bonusToTag(idx, info) {
 var uiFilter = {};
 function onChangeUiFilter() {
   uiFilter = {};
-  $('input[name=inventory]:checked').each(function() {
+  $('.fliter:checked').each(function() {
     uiFilter[$(this).val()] = true;
   });
 
@@ -351,7 +349,9 @@ function byScore(a, b) {
 }
 
 function byId(a, b) {
-  return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
+  var cata = category.indexOf(a.type.type);
+  var catb = category.indexOf(b.type.type);
+  return (cata - catb == 0) ? a.id - b.id : cata - catb;
 }
 
 function filterTopAccessories(filters) {
@@ -363,14 +363,12 @@ function filterTopAccessories(filters) {
   var result = {};
   for (var i in clothes) {
     if (matches(clothes[i], {}, filters)) {
-      if (!isFilteringMode) {
         clothes[i].calc(filters);
         if (!result[clothes[i].type.type]) {
           result[clothes[i].type.type] = clothes[i];
         } else if (clothes[i].tmpScore > result[clothes[i].type.type].tmpScore) {
           result[clothes[i].type.type] = clothes[i];
         }
-      }
     }
   }
   var toSort = [];
@@ -406,14 +404,12 @@ function filterTopClothes(filters) {
   var result = {};
   for (var i in clothes) {
     if (matches(clothes[i], {}, filters)) {
-      if (!isFilteringMode) {
         clothes[i].calc(filters);
         if (!result[clothes[i].type.type]) {
           result[clothes[i].type.type] = clothes[i];
         } else if (clothes[i].tmpScore > result[clothes[i].type.type].tmpScore) {
           result[clothes[i].type.type] = clothes[i];
         }
-      }
     }
   }
   return result;
@@ -423,42 +419,45 @@ function filtering(criteria, filters) {
   var result = [];
   for (var i in clothes) {
     if (matches(clothes[i], criteria, filters)) {
-      if (!isFilteringMode) {
-        clothes[i].calc(criteria);
-      }
+      clothes[i].calc(criteria);
       result.push(clothes[i]);
     }
   }
-  if (isFilteringMode) {
-    result.sort(byId);
-  } else {
+  var haveCriteria = false;
+  for (var prop in criteria){
+	if(criteria[prop] != 0){
+		haveCriteria = true;
+	}
+  }
+  if(haveCriteria){
     result.sort(byCategoryAndScore);
-  } 
+  }
+  else{
+    result.sort(byId);
+  }
+  
+  if(filters.toplevel){
+	var size = 10;
+	if(result[0].type.mainType == "饰品")
+	  size = 5;
+	var tsize = size;
+	for(var i in result){		
+		if(i>0 && result[i].type.type != result[i-1].type.type)
+			tsize = size;
+		if(tsize > 0)
+			result2.push(result[i]);
+		tsize--;
+	}
+	if(filters.sortbyscore)
+		result2.sort(byScore);
+	else 
+		result.sort(byCategoryAndScore);		
+	return result2;
+  }
   return result;
 }
 
 function matches(c, criteria, filters) {
-  // only filter by feature when filtering
-  if (isFilteringMode) {
-    for (var i in FEATURES) {
-      var f = FEATURES[i];
-      if (criteria[f] && criteria[f] * c[f][2] < 0) {
-        return false;
-      }
-    }
-  }
-  if (isFilteringMode && criteria.bonus) {
-    var matchedTag = false;
-    for (var i in criteria.bonus) {
-      if (tagMatcher(criteria.bonus[i].tagWhitelist, c)) {
-        matchedTag = true;
-        break;
-      }
-    }
-    if (!matchedTag) {
-      return false;
-    }
-  }
   return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type.type];
 }
 
@@ -513,8 +512,6 @@ function switchCate(c) {
   $("#category-" + c).addClass("active");
   onChangeUiFilter();
 }
-
-var isFilteringMode = false;
 
 function changeFilter() {
   $("#theme")[0].options[0].selected = true;
@@ -649,6 +646,14 @@ function doImport() {
   }
 }
 
+function initEvent(){
+  $(".fliter").change(function(){
+	  onChangeUiFilter();
+	  if(this.value == "balance"){
+		  changeTheme();
+	  }
+  });
+}
 function init() {
   var mine = loadFromStorage();
   calcDependencies();
@@ -658,6 +663,7 @@ function init() {
   switchCate(category[0]);
   updateSize(mine);
   refreshShoppingCart();
+  initEvent();
   onChangeCriteria();
 }
 $(document).ready(function() {
